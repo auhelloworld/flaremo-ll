@@ -1,0 +1,50 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "flaremo-ll",
+  "main": "./apps/worker/src/index.ts",
+  "compatibility_date": "2026-07-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "assets": {
+    "directory": "./apps/web/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*",
+      "/file/*",
+      "/mcp",
+      "/openapi.json",
+      "/memos.api.v1.*"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "flaremo",
+      "database_id": "018b2ab2-2126-4e46-9ee1-27c7f5599f2d",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ATTACHMENTS",
+      "bucket_name": "flaremo-attachments","preview_bucket_name": "flaremo-attachments"
+    }
+  ],
+  "triggers": {
+    "crons": ["17 3 * * *"]
+  },
+  "vars": {
+    "FLAREMO_DEPLOY_REPOSITORY": "https://github.com/auhelloworld/FlareMo",
+    "FLAREMO_SINGLE_USER_EMAIL": "liulianghust@gmail.com",
+    "FLAREMO_SINGLE_USER_NAME": "LL",
+    // Canonical origin used by Better Auth for callback and cookie checks.
+    // Set this to the deployed origin; keep secrets out of this file.
+    "FLAREMO_PUBLIC_URL": "https://flaremo.workers.dev",
+    // Optional comma-separated additional browser origins for trusted clients.
+    "FLAREMO_TRUSTED_ORIGINS": "https://flaremo.workers.dev"
+  }
+}
